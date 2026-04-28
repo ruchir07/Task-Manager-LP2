@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 const Task = require('./models/Task');
 
 const app = express();
@@ -13,8 +14,8 @@ app.use(express.json());
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/taskmanager')
-.then(() => console.log('Connected to MongoDB'))
-.catch((err) => console.error('Failed to connect to MongoDB', err));
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((err) => console.error('Failed to connect to MongoDB', err));
 
 // Routes
 // Get all tasks
@@ -73,7 +74,26 @@ app.delete('/api/tasks/:id', async (req, res) => {
   }
 });
 
+// ==========================================
+// NEW DEPLOYMENT CODE STARTS HERE
+// ==========================================
+
+// Serve the static files from the React frontend app
+// This assumes your frontend folder is side-by-side with your backend folder
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Catch-all route to serve index.html for any request that doesn't match an API route
+// This handles React Router if you are using it (or just ensures the page loads if refreshed)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
+});
+
+// ==========================================
+// NEW DEPLOYMENT CODE ENDS HERE
+// ==========================================
+
 // Start server
-app.listen(PORT, () => {
+// Added '0.0.0.0' to ensure it explicitly accepts connections from the outside world on EC2
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });

@@ -55,7 +55,9 @@ npm install
 nano .env
 
 Add the following:
+
 PORT=5000
+
 MONGODB_URI=mongodb+srv://<your-username>:<your-password>@cluster.mongodb.net/taskmanager
 
 ## ⚠️ Important: The Express 5 Routing Fix
@@ -81,23 +83,29 @@ app.listen(PORT, '0.0.0.0', () => {
 
 Or instead use Express-4 version instead of 5
 1) In backend folder -
+   
    npm uninstall express
+
    npm install express@4
+
    npm list express
 
-## Step 5: Running the App with PM2
+# Step 5: Running the App with PM2
 
-# Install PM2 globally using sudo
+## Install PM2 globally using sudo
 sudo npm install -g pm2
 
-# Start the application
+## Start the application
 pm2 start index.js --name "task-manager-api"
 
-# Configure PM2 to restart on server reboot
-pm2 startup
-# (Run the specific command PM2 outputs on the screen)
+## To check whether process is Running
+pm2 status
 
-# Save the current list of processes
+## Configure PM2 to restart on server reboot
+pm2 startup
+## (Run the specific command PM2 outputs on the screen)
+
+## Save the current list of processes
 pm2 save
 
 
